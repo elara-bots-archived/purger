@@ -1,6 +1,6 @@
 const { Collection, SnowflakeUtil } = require("discord.js");
 
-exports.fetchMessages = (channel, limit = 50, before, after, around) => {
+exports.fetchMessages = async (channel, limit = 50, before, after, around) => {
     if (limit && limit > 100) {
         let logs = [];
         const get = async (_before, _after) => {
@@ -18,7 +18,7 @@ exports.fetchMessages = (channel, limit = 50, before, after, around) => {
     return [ ...(await channel.messages.fetch({ limit, before, after, around }).catch(() => new Collection())).values() ];
 }
 
-exports.deleteMessages = (channel, messageIDs) => {
+exports.deleteMessages = async (channel, messageIDs) => {
     if (messageIDs.length <= 0) throw new Error(`[PURGER:deleteMessages]: No messages provided!`);
     messageIDs = messageIDs.filter(id => Date.now() - SnowflakeUtil.deconstruct(id).timestamp < 1209600000)
     if (messageIDs.length <= 100) {
