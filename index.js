@@ -5,10 +5,11 @@ const { DISCORD_INVITE, LINK } = {
     Utils = require("./utils");
 
 class Purger {
-    constructor(channel, amount = 1, cmd = false) {
+    constructor(channel, amount = 1, cmd = false, maxLimit = 500) {
         this.channel = channel;
         this.amount = Number(amount ?? 1);
         this.cmd = Boolean(cmd ?? false);
+        this.maxLimit = maxLimit || 500;
     }
 
     links(amount) { return this.purge(m => !m.pinned && !m.content?.match(LINK), amount) }
@@ -35,7 +36,7 @@ class Purger {
 
     async init(filter, user = null, content = "") {
         let amount = this.amount;
-        if (amount > 500) amount = 500;
+        if (amount > this.maxLimit) amount = this.maxLimit;
         const f = (reg, name) => {
             if (filter.match(new RegExp(reg, "i"))) filter = name;
         }
@@ -79,7 +80,7 @@ class Purger {
     async fetch() {
         if (!this.channel.permissionsFor(this.channel.client.user.id).has(93184n)) return Promise.resolve(null);
         let amount = 0;
-        if (this.amount <= 500 && this.amount >= 100) amount = 500;
+        if (this.amount <= this.maxLimit && this.amount >= 100) amount = this.maxLimit;
         else
         if (this.amount <= 100 && this.amount >= 50) amount = 200;
         else amount = 100;

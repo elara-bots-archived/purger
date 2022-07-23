@@ -7,11 +7,12 @@ declare module "@elara-services/purger" {
     export type PurgerTypeResponse = Promise<number|null>;
 
     export class Purger {
-        public constructor(channel: TextBasedChannel, amount?: number, cmd?: boolean);
+        public constructor(channel: TextBasedChannel, amount?: number, cmd?: boolean, maxLimit?: number);
 
         public channel: TextBasedChannel;
         public amount: number;
         public cmd: boolean;
+        public maxLimit: number;
 
         public links(amount?: number): PurgerTypeResponse;
         public bots(amount?: number): PurgerTypeResponse;
